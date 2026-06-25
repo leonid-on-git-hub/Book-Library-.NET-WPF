@@ -1,1 +1,0 @@
-Book Library demo app.
