@@ -11,8 +11,6 @@ namespace BookLibrary.UI.Controls
     /// </summary>
     public partial class BookView : UserControl
     {
-        private int AuthorsCount = 0;
-
         public static readonly DependencyProperty BookNameProperty =
             DependencyProperty.Register("BookName", typeof(string), typeof(BookView), new UIPropertyMetadata(string.Empty));
 
@@ -61,7 +59,7 @@ namespace BookLibrary.UI.Controls
 
         private void btnAddAuthor_Click(object sender, RoutedEventArgs e)
         {
-            if (AuthorsCount > 4)
+            if (BookAuthors.Count > 4)
             {
                 return;
             }
@@ -110,14 +108,12 @@ namespace BookLibrary.UI.Controls
                 if (currentIndex >= 0)
                     RemoveTextBox(currentIndex);
                 spAuthors.Children.Remove(authorPanel);
-                AuthorsCount--;
             };
 
             authorPanel.Children.Add(newTextBox);
             authorPanel.Children.Add(removeButton);
 
             spAuthors.Children.Add(authorPanel);
-            AuthorsCount++;
         }
 
         private void RemoveTextBox(int index)
