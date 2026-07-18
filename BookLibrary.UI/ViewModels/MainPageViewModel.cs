@@ -38,7 +38,7 @@ namespace BookLibrary.UI.ViewModels
             var book = item as Book;
             return book.Name.ToString().Contains(_filterString, StringComparison.CurrentCultureIgnoreCase)
                 ||
-                book.Authors.ToString().Contains(_filterString, StringComparison.CurrentCultureIgnoreCase)
+                book.Authors.Any(author => author.Contains(_filterString, StringComparison.CurrentCultureIgnoreCase))
                 ||
                 book.Year.Contains(_filterString)
                 ||
