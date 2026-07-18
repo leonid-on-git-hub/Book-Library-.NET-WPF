@@ -19,9 +19,8 @@
             </Button.Background>
         </Button>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <ctr:BookView x:Name="bookView" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button x:Name="BtnEditBook" Style="{StaticResource ActionButton}" Content="Edit book" Grid.Row="3" HorizontalAlignment="Left" Margin="211,0,0,0" Width="106" Height="43" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
-            </Button>
+            <ctr:BookView x:Name="bookView" HorizontalAlignment="Center" Height="360"/>
+            <Button x:Name="BtnEditBook" Style="{StaticResource ActionButton}" Content="Edit book" Width="106" Height="44" Margin="0,10,0,0"/>
         </StackPanel>
     </Grid>
 </Page>

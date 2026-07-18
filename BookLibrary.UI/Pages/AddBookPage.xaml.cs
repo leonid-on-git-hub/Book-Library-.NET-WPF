@@ -26,12 +26,12 @@ namespace BookLibrary.UI.Pages
 
         private async Task AddBook()
         {
-            if (!string.IsNullOrEmpty(bookView.BookName) && !string.IsNullOrEmpty(bookView.BookAuthors))
+            if (!string.IsNullOrEmpty(bookView.BookName) && bookView.BookAuthors.Count > 0)
             {
-                var book = new Book(bookView.BookName, bookView.BookAuthors.Split(","), bookView.BookYear, true);
+                var book = new Book(bookView.BookName, bookView.BookAuthors, bookView.BookYear, true);
                 await booksRepository.AddBook(book);
                 bookView.BookName = string.Empty;
-                bookView.BookAuthors = string.Empty;
+                bookView.BookAuthors = [];
                 NavigationService.Navigated += NavigationService_Navigated;
                 NavigationService.GoBack();
             }

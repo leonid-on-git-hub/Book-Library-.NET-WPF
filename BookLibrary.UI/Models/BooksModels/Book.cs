@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BookLibrary.UI.Models.BooksModels
 {
@@ -6,7 +7,7 @@ namespace BookLibrary.UI.Models.BooksModels
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }
-        public string Authors { get; set; }
+        public List<string> Authors { get; set; }
         public string Year { get; set; }
         public bool IsAvailable { get; set; }
 
@@ -14,7 +15,7 @@ namespace BookLibrary.UI.Models.BooksModels
         {
             Id = bookitem.Id;
             Name = bookitem.Name;
-            Authors = string.Join(", ", bookitem.Authors);
+            Authors = [.. bookitem.Authors];
             Year = bookitem.Year.Year.ToString();
             IsAvailable = (bool)bookitem.IsAvailable;
         }

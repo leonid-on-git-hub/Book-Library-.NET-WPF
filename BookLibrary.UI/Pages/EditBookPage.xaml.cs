@@ -1,5 +1,6 @@
 ﻿using BookLibrary.Storage.Models.Book;
 using BookLibrary.Storage.Repositories;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -27,7 +28,7 @@ namespace BookLibrary.UI.Pages
                 NavigationService.GoBack();
 
             bookView.BookName = _book.Name;
-            bookView.BookAuthors = string.Join(", ", _book.Authors);
+            bookView.BookAuthors = new ObservableCollection<string>(_book.Authors);
             bookView.BookYear = _book.Year;
 
             BtnBackward.Click += BtnBackward_Click;
@@ -41,11 +42,9 @@ namespace BookLibrary.UI.Pages
 
         private async void BtnUpdateBook_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(bookView.BookName) && !string.IsNullOrEmpty(bookView.BookAuthors))
+            if (!string.IsNullOrEmpty(bookView.BookName) && bookView.BookAuthors.Count > 0)
             {
-                _book.Name = bookView.BookName;
-                _book.Authors = bookView.BookAuthors.Split(",");
-                _book.Year = bookView.BookYear;
+                _book = Book.FromPersistence(_book.Id, bookView.BookName, bookView.BookAuthors, bookView.BookYear, (bool)_book.IsAvailable);
                 await booksRepository.UpdateBook(_book);
                 this.NavigationService.Navigated += NavigationService_Navigated;
                 NavigationService.GoBack();

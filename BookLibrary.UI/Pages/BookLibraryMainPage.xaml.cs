@@ -3,7 +3,10 @@ using BookLibrary.UI.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Navigation;
+using System.Globalization;
+using System.Linq;
 
 namespace BookLibrary.UI.Pages
 {
@@ -39,6 +42,36 @@ namespace BookLibrary.UI.Pages
 
         }
 
+        private class AuthorsToStringConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value == null) return string.Empty;
+
+                if (value is string s) return s;
+
+                if (value is System.Collections.IEnumerable enumerable)
+                {
+                    try
+                    {
+                        var items = enumerable.Cast<object>().Select(o => o?.ToString()).Where(str => !string.IsNullOrEmpty(str));
+                        return string.Join(", ", items);
+                    }
+                    catch
+                    {
+                        return value.ToString();
+                    }
+                }
+
+                return value.ToString();
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotSupportedException();
+            }
+        }
+
         public MainPageViewModel pageModel { get; set; }
 
         private void BtnAddBook_Click(object sender, RoutedEventArgs e)
@@ -50,7 +83,7 @@ namespace BookLibrary.UI.Pages
         {
             var book = BooksGrid.SelectedItem as Models.BooksModels.Book;
             if (book == null) return;
-            var editBook = Storage.Models.Book.Book.FromPersistence(book.Id ?? Guid.NewGuid(), book.Name, book.Authors.Split(","), DateTime.Parse($"01/01/{book.Year}"), book.IsAvailable);
+            var editBook = Storage.Models.Book.Book.FromPersistence(book.Id ?? Guid.NewGuid(), book.Name, book.Authors, DateTime.Parse($"01/01/{book.Year}"), book.IsAvailable);
             NavigationService.Navigate(new EditBookPage(editBook));
         }
 
@@ -179,14 +212,18 @@ namespace BookLibrary.UI.Pages
             }
             if (e.Column.Header.ToString() == "Authors")
             {
-                e.Column.Width = 220;
-                var col = e.Column as DataGridTextColumn;
-
+                // Display Authors collection as a comma-separated string
                 var style = new Style(typeof(TextBlock));
                 style.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
                 style.Setters.Add(new Setter(TextBlock.VerticalAlignmentProperty, VerticalAlignment.Center));
 
-                col.ElementStyle = style;
+                e.Column = new DataGridTextColumn
+                {
+                    Header = "Authors",
+                    Width = 220,
+                    Binding = new Binding("Authors") { Converter = new AuthorsToStringConverter() },
+                    ElementStyle = style
+                };
             }
             if (e.Column.Header.ToString() == "Year")
             {
