@@ -24,7 +24,7 @@ namespace BookLibrary.UI.ViewModels
         private string _panelSubMessage = "Please wait...";
         private int _currentPage = 1;
         private int _numberOfPages = 2;
-        private int _recordsPerPage = 4;
+        private int _recordsPerPage = 10;
         private int _booksTotalCount = 0;
         private string _filter = "all";
 

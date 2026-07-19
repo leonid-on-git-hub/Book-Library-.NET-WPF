@@ -66,9 +66,9 @@ namespace BookLibrary.Storage.Repositories
                 {
                     return Task.FromResult(User.FromPersistence(
                         accountRecord.Login,
+                        profileRecord.Email,
                         profileRecord.FirstName,
-                        profileRecord.LastName,
-                        profileRecord.Email
+                        profileRecord.LastName
                     ));
                 }
             }
